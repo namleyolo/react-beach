@@ -4,6 +4,7 @@ import {Link } from 'react-router-dom';
 import {RoomContext} from '../context';
 import Hero from '../components/Hero';
 import React, { Component } from 'react'
+import StyledComponent from '../components/StyledHero';
 
 export default class SingleRoom extends Component {
     constructor(props) {
@@ -30,13 +31,21 @@ export default class SingleRoom extends Component {
             )
         }
         return (
-            <Hero hero="roomsHero">
+            <>
+            <StyledComponent img={room.images[0] || this.state.defaultBcg}>
                 <Banner title={` ${room.name} room`}>
                    <Link to="/room"className="btn-primary">
                        Back to rooms
                    </Link>
                 </Banner>
-            </Hero>
+            </StyledComponent>
+            <section className="single-room">
+                <div className="single-room-images">{room.images.map((item,index) => {
+                    return <img key={index} src={item} alt={room.name}></img>
+                })}
+                </div>      
+            </section>
+            </>        
         )
     }
 }

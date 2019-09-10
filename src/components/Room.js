@@ -2,13 +2,14 @@ import React from 'react' ;
 import {Link} from "react-router-dom";
 import Proptypes from "prop-types";
 import defaultImg from "../images/room-1.jpeg";
+// import RoomsContainer from "./RoomsContainer";
 export default function Room({room}) {
     // console.log(room);
     console.log(room.slug);
     return (
         <article className="room">
             <div className="img-container">
-                <img src={room.images[0] || defaultImg}></img>
+                <img src={room.images[0] || defaultImg} alt={room.images[0]}></img>
                 <div className="price-top">
                      <h6>${room.price}</h6>
                      <p>per night</p>

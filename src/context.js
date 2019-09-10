@@ -42,4 +42,6 @@ class RoomProvider extends Component {
     }
 }   
 const RoomConsumer = RoomContext.Consumer ;
+console.log(RoomConsumer);
+console.log(RoomContext);
 export {RoomProvider,RoomConsumer,RoomContext};

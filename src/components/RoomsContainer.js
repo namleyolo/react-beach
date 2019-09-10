@@ -1,10 +1,13 @@
-import React from 'react'
+import React, {useContext } from 'react'
 import RoomFilter from '../components/RoomFilter';
 import RoomList from "../components/RoomList";
-import {RoomConsumer} from '../context';
+import {RoomConsumer, RoomContext} from '../context';
 import Loading from './Loading';
 
 export default function RoomsContainer() {
+    // static contextType = RoomContext ;
+    const contextType = useContext(RoomContext); 
+    console.log(contextType);
     return (
         <RoomConsumer>
             {value => {

@@ -9,13 +9,32 @@ class RoomProvider extends Component {
         rooms : [],
         sortedRooms : [],
         featuredRooms : [],
-        loading : true
+        loading : true,
+        type : 'all',
+        capacity : 1,
+        price : 0,
+        minPrice : 0,
+        maxPrice : 0,
+        minSize : 0,
+        maxSize : 0,
+        breakfast : false,
+        pets :  false
     }
     componentDidMount() {
         let rooms = this.formatData(items);
         // console.log(rooms);
         let featuredRooms = rooms.filter(room => room.featured === true) ;
-        this.setState({rooms, featuredRooms , sortedRooms : rooms, loading : false})
+        let maxPrice = Math.max(...rooms.map(val => val.price));
+        console.log(maxPrice)
+        let minPrice = Math.min(...rooms.map(val => val.price));
+        let maxSize = Math.max(...rooms.map(val => val.size));
+        console.log(maxSize);
+
+
+
+
+        this.setState({
+            rooms, featuredRooms , sortedRooms : rooms, loading : false , price : maxPrice , maxPrice, maxSize })
     }
     formatData(items){
         let tempItems = items.map(item =>{
@@ -27,6 +46,23 @@ class RoomProvider extends Component {
         });
         return tempItems;
     }
+    handleChange = (e) => {
+        const type = e.target.type
+        const value = type === "checkbox" ? type.checked : type.value ;
+        const name = e.target.name 
+        console.log(type,name,value);
+        this.setState({[name]: value}, this.filterRooms())
+    }
+    filterRooms() {
+        let {rooms, type, capacity} = this.state;
+        let tempRooms = [...rooms];
+        if (type !== 'all') {
+            tempRooms = tempRooms.filter(room => room.type === type)
+        }
+        this.setState({sortedRooms: tempRooms})
+    } 
+
+        
     getRoom = (slug) =>{
         let tempRooms = [...this.state.rooms]
         const room = tempRooms.find(room => room.slug === slug);
@@ -35,11 +71,11 @@ class RoomProvider extends Component {
 
     render() {
         return (
-            <RoomContext.Provider value={{...this.state, getRoom : this.getRoom}}>
+            <RoomContext.Provider value={{...this.state, getRoom : this.getRoom, handleChange : this.handleChange}}>
               {this.props.children}
             </RoomContext.Provider>
         )
-    }
+    }x
 }   
 const RoomConsumer = RoomContext.Consumer ;
 console.log(RoomConsumer);

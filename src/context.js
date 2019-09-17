@@ -30,9 +30,6 @@ class RoomProvider extends Component {
         let maxSize = Math.max(...rooms.map(val => val.size));
         console.log(maxSize);
 
-
-
-
         this.setState({
             rooms, featuredRooms , sortedRooms : rooms, loading : false , price : maxPrice , maxPrice, maxSize })
     }
@@ -46,23 +43,29 @@ class RoomProvider extends Component {
         });
         return tempItems;
     }
-    handleChange = (e) => {
+    handleChange = e => {
+        console.log(e.target.value);
         const type = e.target.type
-        const value = type === "checkbox" ? type.checked : type.value ;
+        const value = e.type === "checkbox" ? e.target.checked : e.target.value ;
         const name = e.target.name 
-        console.log(type,name,value);
-        this.setState({[name]: value}, this.filterRooms())
+        // console.log(type,name,value);
+        this.setState({[name]: value}, this.filterRooms)
     }
-    filterRooms() {
-        let {rooms, type, capacity} = this.state;
+    filterRooms = () => {
+        let {rooms, type, capacity, price,minSize,maxSize,breakfast,pets} = this.state;
+        console.log("state type;::",type);
         let tempRooms = [...rooms];
         if (type !== 'all') {
-            tempRooms = tempRooms.filter(room => room.type === type)
+            // console.log("DIFFFF")
+            tempRooms = tempRooms.filter(val => val.type === type)
+        }
+        if (capacity !== 1) {
+            // console.log("DIFFFF")
+            tempRooms = tempRooms.filter(val => val.capacity >= capacity)
         }
         this.setState({sortedRooms: tempRooms})
     } 
 
-        
     getRoom = (slug) =>{
         let tempRooms = [...this.state.rooms]
         const room = tempRooms.find(room => room.slug === slug);
@@ -75,9 +78,17 @@ class RoomProvider extends Component {
               {this.props.children}
             </RoomContext.Provider>
         )
-    }x
+    }
 }   
 const RoomConsumer = RoomContext.Consumer ;
-console.log(RoomConsumer);
-console.log(RoomContext);
+export function withRoomConsumer(Component){
+    return function ConsumerWrapper (props) {
+        return <RoomConsumer>
+            {value => <Component {...props} context={value}> </Component>}
+        </RoomConsumer>
+    }
+}
+
+// console.log(RoomConsumer);
+// console.log(RoomContext);
 export {RoomProvider,RoomConsumer,RoomContext};
